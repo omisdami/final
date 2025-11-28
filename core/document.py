@@ -46,15 +46,17 @@ def to_section_def(section: dict[str, Any]) -> TemplateSectionDef:
 async def generate(
         sections: dict[str, Any],
         source_texts: dict[str, str],
-        example_document_text: Optional[str] = None
+        example_document_text: Optional[str] = None,
+        rag_params: Optional[Any] = None
 ) -> dict[str, TemplateSectionDef]:
     """
     Generate a document using the LangGraph pipeline with optional style guidance.
-    
+
     Args:
         sections (dict): Section structure and instructions
         source_texts (dict): Reference documents for data extraction
-        example_document_text (Optional[str]): Example document for style extraction    
+        example_document_text (Optional[str]): Example document for style extraction
+        rag_params (Optional[RagParameters]): RAG configuration parameters
 
     Returns:
         dict[str, TemplateSectionDef]: Generated section definitions
@@ -64,9 +66,14 @@ async def generate(
 
     # Clear vector store to prevent contamination from previous runs
     core.store.clear_store()
-    
+
+    if rag_params:
+        logger.info(f"Using custom RAG parameters: threshold={rag_params.similarity_threshold}, "
+                   f"top_k={rag_params.top_k}, chunk_size={rag_params.chunk_size}, "
+                   f"overlap={rag_params.overlap}%")
+
     logger.info(f"Loading {len(source_texts)} source document(s) into vector store")
-    core.store.add_sources(source_texts)
+    core.store.add_sources(source_texts, rag_params=rag_params)
     
     # Create state - graph will conditionally route based on example_document_text
     if example_document_text and example_document_text.strip():
@@ -109,15 +116,16 @@ async def targeted_edit(
     example_document_text: str,
     reference_texts: dict[str, str],
     section_changes: list[dict],
-    output_filename: str
+    output_filename: str,
+    rag_params: Optional[Any] = None
 ) -> dict:
     """
     Run targeted section editing workflow using LangGraph.
-    
+
     This function takes an example document and selectively modifies specified
     sections based on user directions and reference materials, while keeping
     all other sections unchanged.
-    
+
     Args:
         example_document_text (str): Full text of the example document
         reference_texts (dict[str, str]): Reference documents {filename: content}
@@ -125,7 +133,8 @@ async def targeted_edit(
             - section_name (str): Name of the section to modify
             - user_direction (str): Instructions for how to change it
         output_filename (str): Path where the edited document will be saved
-        
+        rag_params (Optional[RagParameters]): RAG configuration parameters
+
     Returns:
         dict: Final state containing:
             - stats (dict): Statistics about the editing process
@@ -135,10 +144,10 @@ async def targeted_edit(
     """
     from core.agents.targeted_editing_graph import get_targeted_editing_graph
     from core.agents.state import TargetedEditingState, SectionChange
-    
+
     logger.info("Starting targeted editing workflow")
     logger.info(f"Sections to modify: {len(section_changes)}")
-    
+
     # Convert section changes to SectionChange objects
     changes = [
         SectionChange(
@@ -150,9 +159,12 @@ async def targeted_edit(
 
     # Clear vector store to prevent contamination from previous runs
     core.store.clear_store()
-    
+
+    if rag_params:
+        logger.info(f"Using custom RAG parameters for targeted editing")
+
     logger.info(f"Loading {len(reference_texts)} source document(s) into vector store")
-    core.store.add_sources(reference_texts)
+    core.store.add_sources(reference_texts, rag_params=rag_params)
     
     # Create initial state
     initial_state = TargetedEditingState(

@@ -32,33 +32,54 @@ async function uploadFile() {
   const fileInput = document.getElementById("docFile");
   const templateSelect = document.getElementById("templateSelect");
   const exampleFileInput = document.getElementById("exampleFile");
-  
+
   if (fileInput.files.length === 0) {
     alert("Please select at least one reference document.");
     return;
   }
-  
+
   if (!templateSelect.value) {
     alert("Please select a template.");
     return;
   }
-  
+
+  // Validate RAG parameters
+  if (!validateRagParameters()) {
+    return;
+  }
+
   updateProgressBar(2, "Step 2: Processing Documents...");
-  
+
   const formData = new FormData();
-  
+
   // Add reference files
   for (let file of fileInput.files) {
     formData.append("files", file);
   }
-  
+
   // Add template
   formData.append("template_name", templateSelect.value);
-  
+
   // Add example file if available
   if (exampleFileInput.files[0]) {
     formData.append("example_file", exampleFileInput.files[0]);
   }
+
+  // Add RAG parameters
+  const ragPreset = document.getElementById("ragPresetSelect").value;
+  const similarityThreshold = parseFloat(document.getElementById("similarityThreshold").value);
+  const topK = parseInt(document.getElementById("topK").value);
+  const chunkSize = parseInt(document.getElementById("chunkSize").value);
+  const overlap = parseInt(document.getElementById("overlap").value);
+
+  if (ragPreset !== "default") {
+    formData.append("rag_preset", ragPreset);
+  }
+
+  formData.append("similarity_threshold", similarityThreshold);
+  formData.append("top_k", topK);
+  formData.append("chunk_size", chunkSize);
+  formData.append("overlap", overlap)
   
   try {
     const response = await fetch("/documents/process/", {
@@ -382,6 +403,87 @@ function submitRating(rating) {
 }
 
 // ============================================================
+// RAG Parameter Functions
+// ============================================================
+
+function validateRagParameters() {
+  const errors = [];
+  const similarityThreshold = parseFloat(document.getElementById("similarityThreshold").value);
+  const topK = parseInt(document.getElementById("topK").value);
+  const chunkSize = parseInt(document.getElementById("chunkSize").value);
+  const overlap = parseInt(document.getElementById("overlap").value);
+
+  if (isNaN(similarityThreshold) || similarityThreshold < 0 || similarityThreshold > 1) {
+    errors.push("Similarity threshold must be between 0.0 and 1.0");
+  }
+
+  if (isNaN(topK) || topK < 1 || topK > 50) {
+    errors.push("Top K must be between 1 and 50");
+  }
+
+  if (isNaN(chunkSize) || chunkSize < 100 || chunkSize > 2000) {
+    errors.push("Chunk size must be between 100 and 2000");
+  }
+
+  if (isNaN(overlap) || overlap < 0 || overlap > 50) {
+    errors.push("Overlap must be between 0 and 50");
+  }
+
+  const errorDiv = document.getElementById("ragValidationErrors");
+  if (errors.length > 0) {
+    errorDiv.innerHTML = errors.join("<br>");
+    errorDiv.classList.remove("d-none");
+    return false;
+  }
+
+  errorDiv.classList.add("d-none");
+  return true;
+}
+
+function resetRagParameters() {
+  document.getElementById("ragPresetSelect").value = "default";
+  applyRagPreset("default");
+}
+
+function applyRagPreset(presetName) {
+  const presets = {
+    default: {
+      similarity_threshold: 0.6,
+      top_k: 5,
+      chunk_size: 512,
+      overlap: 15
+    },
+    high_precision: {
+      similarity_threshold: 0.8,
+      top_k: 3,
+      chunk_size: 256,
+      overlap: 10
+    },
+    comprehensive: {
+      similarity_threshold: 0.5,
+      top_k: 10,
+      chunk_size: 1024,
+      overlap: 20
+    },
+    fast: {
+      similarity_threshold: 0.7,
+      top_k: 3,
+      chunk_size: 256,
+      overlap: 10
+    }
+  };
+
+  const preset = presets[presetName];
+  if (preset) {
+    document.getElementById("similarityThreshold").value = preset.similarity_threshold;
+    document.getElementById("similarityThresholdValue").textContent = preset.similarity_threshold;
+    document.getElementById("topK").value = preset.top_k;
+    document.getElementById("chunkSize").value = preset.chunk_size;
+    document.getElementById("overlap").value = preset.overlap;
+  }
+}
+
+// ============================================================
 // Initialization
 // ============================================================
 
@@ -420,7 +522,30 @@ window.addEventListener("DOMContentLoaded", () => {
       sendQuestion();
     }
   });
-  
+
+  // RAG parameter event listeners
+  const ragPresetSelect = document.getElementById("ragPresetSelect");
+  if (ragPresetSelect) {
+    ragPresetSelect.addEventListener("change", function() {
+      applyRagPreset(this.value);
+    });
+  }
+
+  const similarityThresholdInput = document.getElementById("similarityThreshold");
+  if (similarityThresholdInput) {
+    similarityThresholdInput.addEventListener("input", function() {
+      document.getElementById("similarityThresholdValue").textContent = this.value;
+    });
+  }
+
+  const ragInputs = ["topK", "chunkSize", "overlap"];
+  ragInputs.forEach(id => {
+    const input = document.getElementById(id);
+    if (input) {
+      input.addEventListener("blur", validateRagParameters);
+    }
+  });
+
   revealOnScroll();
 });
 

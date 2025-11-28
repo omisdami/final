@@ -11,6 +11,7 @@ from core.workflows.document_extraction import save_uploaded_file, extract_and_c
 from core.workflows.document_drafting import flatten_report_sections
 from core.workflows.document_editor import save_updated_outputs
 from core.utils.text_extractor import extract_text
+from core.config.rag_config import RagParameters, RagPreset
 import os
 import json
 import uuid
@@ -83,7 +84,12 @@ async def list_templates():
 async def process_document(
     files: List[UploadFile] = File(...),
     template_name: str = Form("proposal_template.json"),
-    example_file: Optional[UploadFile] = File(None)
+    example_file: Optional[UploadFile] = File(None),
+    similarity_threshold: Optional[float] = Form(None),
+    top_k: Optional[int] = Form(None),
+    chunk_size: Optional[int] = Form(None),
+    overlap: Optional[int] = Form(None),
+    rag_preset: Optional[str] = Form(None)
 ):
     """
     Accepts multiple PDF or DOCX files, extracts their content,
@@ -93,11 +99,39 @@ async def process_document(
         files (List[UploadFile]): Uploaded reference documents to process
         template_name (str): Name of the JSON template (default: "proposal_template.json")
         example_file (Optional[UploadFile]): Example document for style extraction and saving
+        similarity_threshold (Optional[float]): RAG similarity threshold (0.0-1.0)
+        top_k (Optional[int]): Number of top documents to retrieve (1-50)
+        chunk_size (Optional[int]): Size of text chunks in tokens (100-2000)
+        overlap (Optional[int]): Percentage of chunk overlap (0-50)
+        rag_preset (Optional[str]): Preset name (default, high_precision, comprehensive, fast)
 
     Returns:
         JSONResponse: Includes message, report, flattened sections, output paths
     """
     logger.info(f"Processing documents with template: {template_name}")
+
+    # Initialize RAG parameters
+    rag_params = None
+    if rag_preset:
+        rag_params = RagPreset.get_preset(rag_preset)
+        logger.info(f"Using RAG preset: {rag_preset}")
+
+    # Override with custom parameters if provided
+    if any([similarity_threshold is not None, top_k is not None,
+            chunk_size is not None, overlap is not None]):
+        if not rag_params:
+            rag_params = RagParameters()
+
+        if similarity_threshold is not None:
+            rag_params.similarity_threshold = similarity_threshold
+        if top_k is not None:
+            rag_params.top_k = top_k
+        if chunk_size is not None:
+            rag_params.chunk_size = chunk_size
+        if overlap is not None:
+            rag_params.overlap = overlap
+
+        logger.info(f"Using custom RAG parameters: {rag_params.model_dump()}")
     
     # Validate template
     template_dir = "templates"
@@ -141,11 +175,12 @@ async def process_document(
 
 
         # 4. Generate report
-        
+
         report_sections = await core.document.generate(
             sections,
             extracted_texts,
-            example_document_text=example_text
+            example_document_text=example_text,
+            rag_params=rag_params
         )
         
         # Convert Pydantic models to dictionaries for backward compatibility
@@ -280,7 +315,12 @@ async def save_feedback(feedback: FeedbackPayload):
 async def targeted_edit_document(
     example_file: UploadFile = File(...),
     reference_files: List[UploadFile] = File(...),
-    section_changes: str = Form(...)  # JSON array
+    section_changes: str = Form(...),
+    similarity_threshold: Optional[float] = Form(None),
+    top_k: Optional[int] = Form(None),
+    chunk_size: Optional[int] = Form(None),
+    overlap: Optional[int] = Form(None),
+    rag_preset: Optional[str] = Form(None)
 ):
     """
     Edit specific sections of an example document using targeted editing.    
@@ -306,10 +346,33 @@ async def targeted_edit_document(
     """
     import traceback
     from datetime import datetime
-    
+
     try:
         logger.info("Starting targeted editing workflow")
-        
+
+        # Initialize RAG parameters
+        rag_params = None
+        if rag_preset:
+            rag_params = RagPreset.get_preset(rag_preset)
+            logger.info(f"Using RAG preset: {rag_preset}")
+
+        # Override with custom parameters if provided
+        if any([similarity_threshold is not None, top_k is not None,
+                chunk_size is not None, overlap is not None]):
+            if not rag_params:
+                rag_params = RagParameters()
+
+            if similarity_threshold is not None:
+                rag_params.similarity_threshold = similarity_threshold
+            if top_k is not None:
+                rag_params.top_k = top_k
+            if chunk_size is not None:
+                rag_params.chunk_size = chunk_size
+            if overlap is not None:
+                rag_params.overlap = overlap
+
+            logger.info(f"Using custom RAG parameters: {rag_params.model_dump()}")
+
         # Save and extract example file (preserve structure for heading detection)
         example_path = save_uploaded_file(example_file)
         example_text = extract_and_clean_text(example_path, preserve_structure=True)
@@ -350,7 +413,8 @@ async def targeted_edit_document(
             example_document_text=example_text,
             reference_texts=reference_texts,
             section_changes=changes,
-            output_filename=output_filename
+            output_filename=output_filename,
+            rag_params=rag_params
         )
         
         # Cleanup temp files
