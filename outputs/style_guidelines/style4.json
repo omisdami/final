@@ -1,0 +1,67 @@
+{
+  "extracted_at": "2025-10-16T20:10:00.766705",
+  "style_guidelines": {
+    "writing_style": {
+      "tone": "Professional, authoritative, and solution-oriented. The tone is confident and emphasizes expertise, reliability, and innovation. There is a focus on measurable outcomes and client benefits.",
+      "voice": "Third-person, objective, and company-centric. The voice is consistent, using 'Hydrosight Systems Inc.' and 'the company' rather than first-person pronouns. Occasional use of 'clients' to directly address the audience.",
+      "formality_level": "Formal",
+      "technical_complexity": "Medium to high; technical concepts are explained clearly but assume some familiarity with industry terminology."
+    },
+    "sentence_patterns": {
+      "average_length": "Medium to long",
+      "complexity": "Compound and complex sentences predominate, often with multiple clauses to convey detailed information. Occasional use of lists for clarity.",
+      "voice_preference": "Active voice is preferred, though passive constructions are used where appropriate to emphasize processes or outcomes."
+    },
+    "paragraph_style": {
+      "length": "Medium to long",
+      "organization": "Paragraphs are organized by topic or subtopic, often beginning with a clear topic sentence followed by supporting details. Each paragraph addresses a specific aspect of the solution, methodology, or value proposition.",
+      "transition_style": "Transitions are logical and explicit, often using summary statements or linking phrases to guide the reader from one section to the next."
+    },
+    "language_patterns": {
+      "terminology": [
+        "IoT sensors",
+        "AI-driven analytics",
+        "predictive maintenance",
+        "regulatory compliance",
+        "operational visibility",
+        "environmental standards",
+        "flagship product",
+        "platform configuration",
+        "integration",
+        "KPI",
+        "agile-driven iterative delivery",
+        "phased waterfall execution",
+        "stakeholders",
+        "risk mitigation",
+        "data privacy",
+        "cybersecurity"
+      ],
+      "professional_language": "Consistently uses precise, industry-appropriate language. Jargon is used where necessary but is often accompanied by brief explanations. The language is persuasive, highlighting benefits and differentiators.",
+      "industry_specific": [
+        "water management",
+        "leak detection",
+        "sensor deployment",
+        "system integration",
+        "environmental certifications",
+        "carbon offset estimations",
+        "sustainability reporting",
+        "project methodology"
+      ]
+    },
+    "formatting_preferences": {
+      "heading_style": "Clear, bolded section headings (e.g., 'Executive Summary', 'Value Proposition', 'Scope of Work & Project Methodology') and numbered subheadings (e.g., '1.1 Scope of Work').",
+      "list_usage": "Frequent use of numbered and bulleted lists to break down complex information, outline steps, or enumerate benefits and risks.",
+      "emphasis_methods": "Emphasis is achieved through section headings, subheadings, and list formatting rather than typographic emphasis (e.g., bold or italics within paragraphs is not used)."
+    },
+    "content_characteristics": {
+      "detail_level": "High; content is comprehensive, providing both high-level overviews and granular details (e.g., specific steps, roles, and risk mitigation strategies).",
+      "evidence_usage": "Evidence is presented through quantitative results (e.g., 'up to 25% water savings'), references to pilot programs, and descriptions of proven methodologies.",
+      "example_integration": "Examples are integrated as supporting evidence within value propositions and differentiators, often referencing real-world outcomes or pilot program results."
+    },
+    "document_structure": {
+      "section_organization": "Document is organized into clearly defined sections: Executive Summary, Value Proposition, Why Hydrosight Systems Inc., Scope of Work & Project Methodology (with sub-sections), Communication Plan and Client Interface, Project Assumptions, and Project Risks & Mitigation.",
+      "flow_pattern": "Logical, top-down flow: starts with a broad overview, narrows to specific value propositions, then details methodology, communication, assumptions, and risk management.",
+      "conclusion_style": "No explicit concluding paragraph; instead, the document ends with a comprehensive risk and mitigation section, reinforcing thoroughness and preparedness."
+    }
+  }
+}

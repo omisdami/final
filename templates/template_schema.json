@@ -1,0 +1,47 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "executive_summary": { "$ref": "#/definitions/section" },
+    "value_proposition": { "$ref": "#/definitions/section" },
+    "why_company_a":     { "$ref": "#/definitions/section" },
+    "scope_of_work_and_methodology": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": { "type": "string" },
+        "subsections": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/definitions/section" }
+        }
+      },
+      "required": ["title","subsections"]
+    }
+  },
+  "definitions": {
+    "section": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": { "type": "string" },
+        "source": { "type": "string" },
+        "instructions": {
+          "type": "object",
+          "properties": {
+            "objective": { "type": "string" },
+            "tone":      { "type": "string" },
+            "length":    { "type": "string" },
+            "format":    { "type": "string" }
+          },
+          "required": ["objective"]
+        },
+        "content": { "type": "string" },
+        "subsections": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/definitions/section" }
+        }
+      },
+      "required": ["title"]
+    }
+  }
+}

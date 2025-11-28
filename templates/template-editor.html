@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Template Editor</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsoneditor@10.0.2/dist/jsoneditor.min.css">
+</head>
+<body class="bg-light p-3">
+  <div class="container">
+    <h3 class="mb-3">Template Editor</h3>
+
+    <div class="d-flex gap-2 mb-2">
+      <select id="tplList" class="form-select w-auto"></select>
+      <button id="loadBtn"   class="btn btn-secondary">Load</button>
+      <button id="newBtn"    class="btn btn-outline-primary">New</button>
+      <button id="saveBtn"   class="btn btn-primary">Save</button>
+      <button id="saveAsBtn" class="btn btn-outline-primary">Save As…</button>
+      <button id="delBtn"    class="btn btn-outline-danger">Delete</button>
+      <span id="status" class="ms-2 text-muted"></span>
+    </div>
+
+    <div id="editor" style="height:70vh;background:#fff;border:1px solid #ddd;"></div>
+    <p class="small text-muted mt-2">
+      Tip: add/remove sections under <code>scope_of_work_and_methodology.subsections</code>.
+    </p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/jsoneditor@10.0.2/dist/jsoneditor.min.js"></script>
+  <script>
+    let editor, current = null;
+
+    async function listTemplates(){
+      const names = await (await fetch('/api/templates')).json();
+      const el = document.getElementById('tplList'); el.innerHTML='';
+      names.forEach(n=>{ const o=document.createElement('option'); o.textContent=n; el.appendChild(o); });
+      if(names.length && !current){ el.value = names[0]; }
+    }
+    async function loadTemplate(){
+      const name = document.getElementById('tplList').value;
+      const data = await (await fetch('/api/templates/'+name)).json();
+      editor.set(data); current = name; setStatus('Loaded '+name);
+    }
+    async function saveTemplate(){
+      if(!current){ return saveAsTemplate(); }
+      const body = JSON.stringify(editor.get());
+      const res = await fetch('/api/templates/'+current,{
+        method:'PUT', headers:{'Content-Type':'application/json'}, body
+      });
+      setStatus(res.ok?'Saved ✔':'Save failed');
+    }
+    async function saveAsTemplate(){
+      const name = prompt('New template name (e.g., proposal-v2.json):');
+      if(!name) return;
+      const body = JSON.stringify(editor.get());
+      const url  = '/api/templates?name='+encodeURIComponent(name);
+      const res  = await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body});
+      if(res.ok){ current=name; await listTemplates(); document.getElementById('tplList').value=name; setStatus('Saved as '+name+' ✔'); }
+      else setStatus('Save As failed');
+    }
+    async function deleteTemplate(){
+      if(!current) return;
+      if(!confirm('Delete '+current+' ?')) return;
+      const res = await fetch('/api/templates/'+current,{method:'DELETE'});
+      if(res.ok){ current=null; editor.set({}); await listTemplates(); setStatus('Deleted'); }
+    }
+    function setStatus(msg){ document.getElementById('status').textContent = msg; }
+
+    window.addEventListener('DOMContentLoaded', async ()=>{
+      editor = new JSONEditor(document.getElementById('editor'), { mode:'tree' });
+      await listTemplates();
+      document.getElementById('loadBtn').onclick   = loadTemplate;
+      document.getElementById('saveBtn').onclick   = saveTemplate;
+      document.getElementById('saveAsBtn').onclick = saveAsTemplate;
+      document.getElementById('newBtn').onclick    = ()=>{ editor.set({}); current=null; setStatus('New template'); };
+      document.getElementById('delBtn').onclick    = deleteTemplate;
+    });
+  </script>
+</body>
+</html>

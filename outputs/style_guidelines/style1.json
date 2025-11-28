@@ -1,0 +1,91 @@
+{
+  "extracted_at": "2025-10-16T18:55:06.002126",
+  "style_guidelines": {
+    "writing_style": {
+      "tone": "Professional, authoritative, and objective. The document maintains a confident and knowledgeable tone, emphasizing expertise and reliability. It is persuasive in highlighting the company's strengths and value proposition, but avoids overt marketing language.",
+      "voice": "Third-person, company-centric voice with occasional direct address to the client (e.g., 'By adopting... clients benefit...'). The voice is consistent, clear, and focused on organizational capabilities and client outcomes.",
+      "formality_level": "Formal",
+      "technical_complexity": "Medium to high; technical terms and methodologies are explained clearly, making the content accessible to both technical and non-technical stakeholders."
+    },
+    "sentence_patterns": {
+      "average_length": "Medium to long",
+      "complexity": "Compound and complex sentences are prevalent, often combining multiple related ideas or clauses. Occasional use of simple sentences for emphasis.",
+      "voice_preference": "Primarily active voice, with some passive constructions used for objectivity or to emphasize processes over actors."
+    },
+    "paragraph_style": {
+      "length": "Medium to long",
+      "organization": "Paragraphs are organized by topic or subtopic, often beginning with a clear topic sentence followed by supporting details, examples, or explanations. Each paragraph addresses a specific aspect of the subject.",
+      "transition_style": "Logical and smooth transitions between paragraphs and sections, often using summary or linking phrases to maintain flow and coherence."
+    },
+    "language_patterns": {
+      "terminology": [
+        "IoT sensors",
+        "AI-driven analytics",
+        "dashboards",
+        "real-time monitoring",
+        "anomaly detection",
+        "predictive maintenance",
+        "regulatory compliance",
+        "operational visibility",
+        "environmental standards",
+        "sustainability",
+        "FlowSense",
+        "integration",
+        "platform",
+        "KPI",
+        "project milestones",
+        "deliverables",
+        "success criteria",
+        "calibration",
+        "validation",
+        "user training",
+        "rollout",
+        "Agile",
+        "Waterfall",
+        "sprints",
+        "prototyping",
+        "stakeholders",
+        "project manager",
+        "technical lead",
+        "data analyst",
+        "QA manager",
+        "risk mitigation",
+        "change management",
+        "cybersecurity",
+        "encryption",
+        "role-based access controls"
+      ],
+      "professional_language": "Consistently uses precise, industry-appropriate terminology. Language is clear, direct, and avoids jargon unless it is explained or contextually clear. The document demonstrates subject matter expertise without being overly technical.",
+      "industry_specific": [
+        "smart infrastructure",
+        "sustainable water management",
+        "leak detection",
+        "environmental certifications",
+        "carbon offset estimations",
+        "sensor deployment",
+        "system integration",
+        "user acceptance testing",
+        "middleware",
+        "dynamic thresholding",
+        "alert fatigue",
+        "hybrid connectivity solutions",
+        "ruggedized sensors"
+      ]
+    },
+    "formatting_preferences": {
+      "heading_style": "Uses bolded section headings and numbered subheadings for clear organization (e.g., '1. Scope of Work & Project Methodology', '1.1 Scope of Work'). Headings are concise and descriptive.",
+      "list_usage": "Frequent use of numbered and bulleted lists to break down complex information, outline steps, or enumerate features, benefits, risks, and assumptions. Lists are used for clarity and emphasis.",
+      "emphasis_methods": "Emphasis is achieved through section headings, numbered lists, and strategic placement of key phrases (e.g., 'Achieve Significant Water Savings'). No use of italics or bold within body text; emphasis relies on structure and wording."
+    },
+    "content_characteristics": {
+      "detail_level": "High; the document provides comprehensive explanations, step-by-step methodologies, and detailed descriptions of processes, roles, and deliverables.",
+      "evidence_usage": "Incorporates quantitative evidence (e.g., 'up to 25% water savings', 'leak detection times from several days to less than 30 minutes') and references to pilot programs and proven results to substantiate claims.",
+      "example_integration": "Examples are integrated as supporting evidence within value propositions and differentiators, often referencing real-world outcomes or pilot program results."
+    },
+    "document_structure": {
+      "section_organization": "Clearly segmented into logical sections: Executive Summary, Value Proposition, Why Hydrosight Systems Inc., Scope of Work & Project Methodology (with sub-sections), Communication Plan and Client Interface, Project Assumptions, and Project Risks & Mitigation. Each section addresses a distinct aspect of the proposal.",
+      "flow_pattern": "Progresses from high-level overview and value proposition to detailed methodology, roles, communication, assumptions, and risk management. The flow is logical, moving from general to specific and from strategic to operational.",
+      "conclusion_style": "No explicit concluding paragraph; instead, the document ends with a comprehensive risk and mitigation section, reinforcing thoroughness and preparedness. The overall structure leaves the reader with a sense of confidence in the company's capabilities and planning."
+    }
+  }
+}

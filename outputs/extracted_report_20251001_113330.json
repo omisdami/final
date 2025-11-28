@@ -1,0 +1,44 @@
+{
+  "agent": "extractor_agent",
+  "timestamp": "2025-10-01T11:33:30.318420",
+  "source_file": "multiple_files_combined.docx",
+  "report_sections": {
+    "executive_summary": {
+      "title": "Executive Summary",
+      "content": "There is insufficient information in the structured data to complete the draft for this section."
+    },
+    "value_proposition": {
+      "title": "Value Proposition",
+      "content": "There is insufficient information in the structured data to complete the draft for this section."
+    },
+    "why_company_a": {
+      "title": "Why Company A",
+      "content": "There is insufficient information in the structured data to complete the draft for this section."
+    },
+    "scope_of_work_and_methodology": {
+      "title": "1. Scope of Work & Project Methodology",
+      "subsections": {
+        "scope_of_work": {
+          "title": "1.1 Scope of Work",
+          "content": "There is insufficient information in the structured data to complete the draft for this section."
+        },
+        "project_methodology": {
+          "title": "1.2 Project Methodology",
+          "content": "There is insufficient information in the structured data to complete the draft for this section."
+        },
+        "communication_plan": {
+          "title": "1.3 Communication Plan and Client Interface",
+          "content": "There is insufficient information in the structured data to complete the draft for this section."
+        },
+        "project_assumptions": {
+          "title": "1.4 Project Assumptions",
+          "content": "There is insufficient information in the structured data to complete the draft for this section."
+        },
+        "project_risks_and_mitigation": {
+          "title": "1.5 Project Risks & Mitigation",
+          "content": "There is insufficient information in the structured data to complete the draft for this section."
+        }
+      }
+    }
+  }
+}
