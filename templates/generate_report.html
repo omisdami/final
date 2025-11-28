@@ -90,6 +90,87 @@
             <button onclick="uploadFile()" class="btn btn-primary px-3 py-1">Start Generating!</button>
           </div>
 
+          <!-- RAG Parameter Configuration Section -->
+          <div class="mt-3 p-3 border rounded bg-light">
+            <h6 class="d-flex align-items-center gap-2 mb-2">
+              <span class="material-symbols-outlined">settings</span>
+              RAG Parameters (Optional)
+            </h6>
+            <p class="text-muted small mb-2">
+              Configure how the AI retrieves and processes reference documents. Use presets or customize parameters.
+            </p>
+
+            <!-- Preset Selection -->
+            <div class="mb-3">
+              <label class="form-label small">Parameter Preset</label>
+              <div class="d-flex gap-2">
+                <select id="ragPresetSelect" class="form-select">
+                  <option value="default">Default (Balanced)</option>
+                  <option value="high_precision">High Precision</option>
+                  <option value="comprehensive">Comprehensive</option>
+                  <option value="fast">Fast</option>
+                </select>
+                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="resetRagParameters()">Reset</button>
+              </div>
+            </div>
+
+            <!-- Parameter Controls -->
+            <div class="row g-2">
+              <!-- Similarity Threshold -->
+              <div class="col-md-6">
+                <label for="similarityThreshold" class="form-label small">
+                  Similarity Threshold
+                  <span class="text-muted" style="cursor: help;" title="Minimum relevance score to include documents">(?)</span>
+                </label>
+                <div class="d-flex align-items-center gap-2">
+                  <input type="range" class="form-range" id="similarityThreshold"
+                         min="0" max="1" step="0.05" value="0.6">
+                  <span class="badge bg-secondary" id="similarityThresholdValue">0.6</span>
+                </div>
+              </div>
+
+              <!-- Top K -->
+              <div class="col-md-6">
+                <label for="topK" class="form-label small">
+                  Top K Results
+                  <span class="text-muted" style="cursor: help;" title="Number of top-matching documents to retrieve">(?)</span>
+                </label>
+                <div class="d-flex align-items-center gap-2">
+                  <input type="number" class="form-control form-control-sm" id="topK"
+                         min="1" max="50" value="5">
+                </div>
+              </div>
+
+              <!-- Chunk Size -->
+              <div class="col-md-6">
+                <label for="chunkSize" class="form-label small">
+                  Chunk Size (tokens)
+                  <span class="text-muted" style="cursor: help;" title="Size of text chunks to retrieve">(?)</span>
+                </label>
+                <select class="form-select form-select-sm" id="chunkSize">
+                  <option value="256">Small (256)</option>
+                  <option value="512" selected>Medium (512)</option>
+                  <option value="1024">Large (1024)</option>
+                </select>
+              </div>
+
+              <!-- Overlap -->
+              <div class="col-md-6">
+                <label for="overlap" class="form-label small">
+                  Overlap (%)
+                  <span class="text-muted" style="cursor: help;" title="Percentage of chunk overlap for context continuity">(?)</span>
+                </label>
+                <div class="d-flex align-items-center gap-2">
+                  <input type="number" class="form-control form-control-sm" id="overlap"
+                         min="0" max="50" value="15">
+                </div>
+              </div>
+            </div>
+
+            <!-- Validation Errors -->
+            <div id="ragValidationErrors" class="alert alert-danger mt-2 d-none"></div>
+          </div>
+
           <!-- Example Document Upload Section -->
           <div class="mt-3 p-3 border rounded bg-light">
             <h6 class="d-flex align-items-center gap-2 mb-2">
